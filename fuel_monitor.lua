@@ -105,7 +105,7 @@ function onDraw()
 			endurance_label = "End."
 			endurance_format = "%3u:%02u"
 			charge_label = "Chg."
-			w2 = math.floor(w / 3)
+			w2 = 24
 		else
 			fuel_label = "Fuel"
 			rate_label = "Rate"
