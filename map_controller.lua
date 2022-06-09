@@ -162,6 +162,11 @@ function handleZoom()
 	end
 end
 
+function clearWaypoints()
+	waypoints = List.new()
+	for o=2,5 do output.setNumber(o, 0) end
+end
+
 function handleWaypoints()
 	local nxt = List.peekleft(waypoints)
 	if nxt ~= nil then
@@ -175,12 +180,14 @@ function handleWaypoints()
 	end
 
 	if input.getBool(2) or List.len(waypoints) == 0 then --- clear waypoints list
-		waypoints = List.new()
-		for o=2,5 do output.setNumber(o, 0) end
+		clearWaypoints()
 	end
 
 	if touchX ~= nil and touchY ~= nil then
-		if touchY < lowY or touchX < centerX - CW or touchX > centerX + CW	then
+		if touchY >= lowY - 1 and touchX <= CW then
+			clearWaypoints()
+			nt()
+		elseif touchY < lowY or touchX < centerX - CW or touchX > centerX + CW	then
 			local worldx, worldy = map.screenToMap(gpsx, gpsy, zoom, W, H, touchX, touchY)
 			List.pushright(waypoints, {x = worldx, y = worldy})
 			nt()
@@ -251,6 +258,12 @@ function drawWaypoints()
 			rx, ry = map.mapToScreen(gpsx, gpsy, zoom, W, H, right.x, right.y)
 			screen.drawLine(lx, ly, rx, ry)
 		end)
+
+		--- clear waypoints button
+		screen.setColor(0, 0, 0, 200)
+		screen.drawRectF(0, lowY - 1, CW + 1, CH + 2)
+		screen.setColor(255, 0, 0)
+		screen.drawText(1, lowY, "X")
 	end
 end
 
