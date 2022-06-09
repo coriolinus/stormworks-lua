@@ -18,6 +18,12 @@
 ---     3. next waypoint y
 ---     4. final waypoint x
 ---     5. final waypoint y
+---   Bools:
+---     1. waypoint reached (single tick activation)
+---
+--- Properties:
+---   Numbers:
+---     wptRadius: dist (m) within which we advance to the next GPS point
 
 
 --- character dimensions
@@ -157,7 +163,18 @@ function handleZoom()
 end
 
 function handleWaypoints()
-	if input.getBool(2) then --- clear waypoints list
+	local nxt = List.peekleft(waypoints)
+	if nxt ~= nil then
+		local dist = ((nxt.x - gpsx) ^ 2 + (nxt.y - gpsy) ^ 2) ^ 0.5
+		if dist < property.getNumber("wptRadius") then
+			List.popleft(waypoints)
+			output.setBool(1, true)
+		else
+			output.setBool(1, false)
+		end
+	end
+
+	if input.getBool(2) or List.len(waypoints) == 0 then --- clear waypoints list
 		waypoints = List.new()
 		for o=2,5 do output.setNumber(o, 0) end
 	end
