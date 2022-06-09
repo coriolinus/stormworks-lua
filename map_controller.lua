@@ -11,6 +11,9 @@ zoomFactor = 2
 minZoom = zoomFactor ^ -3
 maxZoom = zoomFactor ^ 4
 
+--- borders of clickable zoom buttons; set on draw
+lowY = 99999
+
 --- whether or not the screen is currently being touched
 touching = false
 
@@ -54,6 +57,8 @@ function onTick()
 		nt()
 	end
 	touching = input.getBool(1)
+
+	handleZoom()
 end
 
 function rotatePoint(x, y, degrees)
@@ -89,14 +94,6 @@ function drawSelfArrow()
 end
 
 function handleZoom()
-	lowY = screen.getHeight() - CH
-	screen.setColor(0, 0, 0, 200)
-	screen.drawRectF(centerX - CW, lowY, CW, CH)
-	screen.drawRectF(centerX + 1, lowY, CW, CH)
-	screen.setColor(255, 255, 255)
-	screen.drawText(centerX - CW + 1, lowY, "-")
-	screen.drawText(centerX + 2, lowY, "+")
-
 	if touchX ~= nil and touchY ~= nil then
 		if touchY >= lowY then
 			if touchX >= centerX - CW and touchX < centerX then
@@ -110,6 +107,18 @@ function handleZoom()
 	end
 end
 
+function drawZoom()
+	lowY = screen.getHeight() - CH
+
+	screen.setColor(0, 0, 0, 200)
+	screen.drawRectF(centerX - CW, lowY, CW, CH)
+	screen.drawRectF(centerX + 1, lowY, CW, CH)
+
+	screen.setColor(255, 255, 255)
+	screen.drawText(centerX - CW + 1, lowY, "-")
+	screen.drawText(centerX + 2, lowY, "+")
+end
+
 function onDraw()
 	centerX = screen.getWidth() / 2
 	centerY = screen.getHeight() / 2
@@ -117,5 +126,5 @@ function onDraw()
 
     screen.drawMap(gpsx, gpsy, zoom)
     drawSelfArrow()
-    handleZoom()
+    drawZoom()
 end
