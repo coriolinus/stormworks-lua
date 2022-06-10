@@ -183,6 +183,8 @@ function passthrough()
 end
 
 function onTick()
+	devPosition() -- REMOVE THIS FROM THE REAL THING
+
 	--- update the counter, so we can do slow updates only if it is 0
 	counter = (counter + 1) % TICKS_PER_SLOW_UPDATE
 	handleinput()
@@ -196,4 +198,17 @@ function onTick()
 	else
 		passthrough()
 	end
+end
+
+--- DO NOT INCLUDE THIS IN THE VEHICLE
+theta = 0
+thetastep = math.pi / TICKS_PER_SECOND / 2
+function devPosition()
+	theta = theta + thetastep
+	local x = 500 * math.sin(theta)
+	local y = 500 * math.cos(theta)
+	local c = (math.deg(theta) + 90) % 360
+	devinput.setNumber(1, x)
+	devinput.setNumber(2, y)
+	devinput.setNumber(5, c)
 end
