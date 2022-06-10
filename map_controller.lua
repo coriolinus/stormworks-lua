@@ -6,7 +6,7 @@
 ---     2. gps y
 ---     3. touch1 x
 ---     4. touch1 y
----     5. compass
+---     5. compass (degrees)
 ---   Bools:
 ---     1. touch1 pressed
 ---     2. clear waypoints
